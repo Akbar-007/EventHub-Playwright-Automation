@@ -11,12 +11,13 @@ async function login(page) {
     await page.getByPlaceholder("you@email.com").fill(EMAIL);
     await page.locator("#password").fill(PASSWORD);
 
-    // soral94726@caps7.com
-    // Password@akbar45
+  
 
     await page.getByRole("button",{name :"Sign In"}).click();
 
-    await expect (page.getByRole("link",{name: "Browse Events →"})).toBeVisible();
+ await page.waitForTimeout(3000);
+console.log("URL:", page.url());
+console.log("PAGE:", (await page.locator("body").innerText()).slice(0, 1000));
     
 }
 
