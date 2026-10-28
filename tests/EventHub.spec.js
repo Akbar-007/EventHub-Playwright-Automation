@@ -7,24 +7,17 @@ const PASSWORD = process.env.EVENTHUB_PASSWORD?.trim();
 const BASE_URL = 'https://eventhub.rahulshettyacademy.com';
 
 async function login(page) {
-    if (!EMAIL || !PASSWORD) {
-        throw new Error('Missing EVENTHUB_EMAIL or EVENTHUB_PASSWORD. Configure both in GitHub repository secrets before running the workflow.');
-    }
+    await page.goto(`${BASE_URL}/login`);
+    await page.getByPlaceholder("you@email.com").fill(EMAIL);
+    await page.locator("#password").fill(PASSWORD);
 
-    await page.goto(`${BASE_URL}/login`, { waitUntil: 'domcontentloaded' });
-    await page.getByPlaceholder('you@email.com').fill(EMAIL);
-    await page.locator('#password').fill(PASSWORD);
+    // soral94726@caps7.com
+    // Password@akbar45
 
-    await page.getByRole('button', { name: 'Sign In' }).click();
+    await page.getByRole("button",{name :"Sign In"}).click();
 
-    await Promise.race([
-        page.waitForURL(/\/(events|$)/, { timeout: 15000 }),
-        page.getByRole('link', { name: /Browse Events/i }).waitFor({ timeout: 15000 })
-    ]).catch(() => {
-        // keep the assertion below so Playwright shows the real UI state
-    });
-
-    await expect(page.getByRole('link', { name: /Browse Events/i })).toBeVisible({ timeout: 15000 });
+    await expect (page.getByRole("link",{name: "Browse Events →"})).toBeVisible();
+    
 }
 
 test("create event via UI, book it, and verify seat reduction'", async ({ page }) => {
@@ -108,5 +101,18 @@ test("create event via UI, book it, and verify seat reduction'", async ({ page }
 
     console.log(`Seats after booking: ${seatAfterBooking}`);
 
-    expect(seatAfterBooking).toBe(seatbeforebooking - 1);
+expect(seatAfterBooking).toBe(seatbeforebooking - 1);
+
+
+   
+
+
+
+
+
 });
+
+
+
+
+
